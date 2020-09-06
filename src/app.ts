@@ -1,54 +1,24 @@
-import express, { Application, Request, Response, NextFunction } from 'express'
-import path from 'path'
+import express, { Application, Request, Response } from 'express'
 import fs from 'fs'
 import https from 'https'
-import zipdb from 'zippity-do-dah'
-import weather from 'openweather-apis'
 
 const HTTPS_PORT = 4433
 const HTTP_PORT = 8081
 
 const app: Application = express()
-const staticPath = path.join(__dirname, './../public')
 
-interface zipCodeInterface {
-  latitude?: string
-  longitude?: string
-}
-
-app.set('views', path.resolve(__dirname, 'views'))
-app.set('view engine', 'ejs')
-
-app.use(express.static(staticPath))
-
-app.get('/', (req: Request, res: Response) => {
-  res.render('index')
-})
-
-app.get(/^\/(\d{5})$/, function (req: Request, res: Response, next: NextFunction) {
-  const zipCode = req.params[0]
-  const zipCodeInfo: zipCodeInterface = zipdb.zipcode(zipCode)
-  if (zipCodeInfo.latitude === undefined) {
-    next()
+app.get('/random/:min/:max', (req: Request, res: Response) => {
+  const min = parseInt(req.params.min)
+  const max = parseInt(req.params.max)
+  if (isNaN(min) || isNaN(max)) {
+    res.status(400)
+    res.json({ error: 'Bad request.' })
     return
   }
-  weather.setAPPID('604a4b703aea0c3ef8228659beafb8e0')
-  weather.setCoordinate(zipCodeInfo.latitude, zipCodeInfo.longitude)
-  weather.getTemperature((_err: any, temp: object) => {
-    if (_err !== null) {
-      next()
-      return
-    }
-    res.json({
-      zipcode: zipCode,
-      temperature: temp
-    })
+  const result = Math.round((Math.random() * (max - min)) + min)
+  res.json({
+    result
   })
-})
-
-app.use((req: Request, res: Response, next: NextFunction) => {
-  res.status(404)
-  res.send('404')
 })
 
 app.listen(HTTP_PORT, () => console.log(`HTTP server listening on port ${HTTP_PORT}`))
