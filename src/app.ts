@@ -7,18 +7,20 @@ const HTTP_PORT = 8081
 
 const app: Application = express()
 
-app.get('/random/:min/:max', (req: Request, res: Response) => {
-  const min = parseInt(req.params.min)
-  const max = parseInt(req.params.max)
-  if (isNaN(min) || isNaN(max)) {
-    res.status(400)
-    res.json({ error: 'Bad request.' })
-    return
-  }
-  const result = Math.round((Math.random() * (max - min)) + min)
-  res.json({
-    result
-  })
+app.get('/', (req: Request, res: Response) => {
+  res.send('You jus sent a GET request, friend')
+})
+
+app.post('/', (req: Request, res: Response) => {
+  res.send('A POST request? nice!')
+})
+
+app.put('/', (req: Request, res: Response) => {
+  res.send('I don\'t see a lot of PUT requests anymore')
+})
+
+app.delete('/', (req: Request, res: Response) => {
+  res.send('hoy my, a DELETE')
 })
 
 app.listen(HTTP_PORT, () => console.log(`HTTP server listening on port ${HTTP_PORT}`))
