@@ -1,27 +1,17 @@
-import express, { Application, Request, Response } from 'express'
+import express, { Application } from 'express'
 import fs from 'fs'
 import https from 'https'
+import ApiV1 from './api-v1'
+import ApiV2 from './api-v2'
 
 const HTTPS_PORT = 4433
 const HTTP_PORT = 8081
 
 const app: Application = express()
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('You jus sent a GET request, friend')
-})
+app.use('/v1', ApiV1)
 
-app.post('/', (req: Request, res: Response) => {
-  res.send('A POST request? nice!')
-})
-
-app.put('/', (req: Request, res: Response) => {
-  res.send('I don\'t see a lot of PUT requests anymore')
-})
-
-app.delete('/', (req: Request, res: Response) => {
-  res.send('hoy my, a DELETE')
-})
+app.use('/v2', ApiV2)
 
 app.listen(HTTP_PORT, () => console.log(`HTTP server listening on port ${HTTP_PORT}`))
 
