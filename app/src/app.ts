@@ -4,7 +4,7 @@ import https from 'https'
 import ApiV1 from './api-v1'
 import ApiV2 from './api-v2'
 
-const HTTPS_PORT = 4433
+const HTTPS_PORT = 4333
 const HTTP_PORT = 8081
 
 const app: Application = express()

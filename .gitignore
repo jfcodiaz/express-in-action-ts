@@ -1,4 +1,4 @@
-/node_modules
-/dist
-/ssl/certificate.crt
-/ssl/private.key
+/app/node_modules
+/app/dist
+/app/ssl
+/docker/data/mongo

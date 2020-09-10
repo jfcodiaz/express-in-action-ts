@@ -1,0 +1,22 @@
+version: '3.2'
+services: 
+  node:
+    build: ./docker/images/app
+    container_name: node
+    ports:
+      - "8081:8081"
+      - "4333:4333"
+    volumes:
+      - ./app:/opt/app
+      - ./docker/files/ssl-dev:/opt/app/ssl
+    command: tail -f /dev/null
+  mongo:
+    container_name: mongo_db
+    image: mongo
+    expose: 
+      - "27017"
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./docker/data/mongo:/data/db
+  
