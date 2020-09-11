@@ -13,10 +13,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/bcrypt-nodejs": "0.0.31",
+    "@types/faker": "^5.1.0",
+    "@types/mongoose": "^5.7.36",
+    "bcrypt-nodejs": "0.0.3",
     "ejs": "^3.1.5",
     "express": "^4.17.1",
+    "faker": "^5.1.0",
     "fs": "0.0.1-security",
     "https": "^1.0.0",
+    "mongoose": "^5.10.4",
     "morgan": "^1.10.0",
     "openweather-apis": "^4.3.1",
     "zippity-do-dah": "0.0.3"

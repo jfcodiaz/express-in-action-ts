@@ -10,6 +10,8 @@ services:
       - ./app:/opt/app
       - ./docker/files/ssl-dev:/opt/app/ssl
     command: tail -f /dev/null
+    links:
+      - mongo
   mongo:
     container_name: mongo_db
     image: mongo
