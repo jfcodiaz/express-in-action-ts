@@ -67,12 +67,12 @@ userSchema
   }
 
 userSchema.methods.name = function<IUserModel>() {
-  console.log('---', JSON.stringify(this.displayName), '-')
   return this.displayName !== undefined ? this.displayName : this.username
 }
 
 export default mongoose.model<IUserModel>('User', userSchema)
 export {
   IUserModel,
+  IUser,
   callbackCheckPassword
 }

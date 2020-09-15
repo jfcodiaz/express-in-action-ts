@@ -1,8 +1,16 @@
 import express, { Request, Response, NextFunction } from 'express'
 import passport from 'passport'
-import faker from 'faker'
 import User, { IUserModel } from './models/User'
 import { NativeError } from 'mongoose'
+
+function ensureAuthenticated (req: Request, res: Response, next: NextFunction): void {
+  if (req.isAuthenticated()) {
+    next()
+  } else {
+    req.flash('info', 'You must be logged in to see this page.')
+    res.redirect('/login')
+  }
+}
 
 const router = express.Router()
 
@@ -90,26 +98,20 @@ router.get('/users/:username',
   }
 )
 
-router.get('/o', async (req: Request, res: Response) => {
-  const user: IUserModel = new User({
-    username: faker.internet.email(),
-    password: 'Unpa5swOr#',
-    createdAt: new Date(),
-    displayName: 'El azul',
-    bio: 'Bio mamalona'
-  })
+router.get('/edit', ensureAuthenticated, (req: Request, res: Response) => {
+  res.render('edit')
+})
 
-  await user.save()
-  console.log(user.name())
-  console.log('password', user.password)
-  user.checkPassword('Unpa5swOr#', (_err: Error, result: boolean) => {
-    console.log(result)
+router.post('/edit', (req: Request, res: Response, next: NextFunction) => {
+  const user: IUserModel = (req.user as IUserModel)
+  user.displayName = req.body.displayName
+  user.bio = req.body.bio
+  user.save().then(() => {
+    req.flash('info', 'Profile updated!')
+    res.redirect('/edit')
+  }).catch((error) => {
+    next(error)
   })
-  user.checkPassword('otropassword', (_err: Error, result: boolean) => {
-    console.log(result)
-  })
-  console.log('password', user.password)
-  res.send(`${user.username} inserted`)
 })
 
 export default router
