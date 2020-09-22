@@ -1,4 +1,4 @@
-import capitalize from './../src/libs/capitalize'
+import capitalize from '../../src/libs/capitalize'
 import { expect } from 'chai'
 
 describe('capitalize', () => {

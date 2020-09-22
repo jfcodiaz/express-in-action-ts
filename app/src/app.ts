@@ -1,6 +1,6 @@
-import express, { Application } from 'express'
-import fs from 'fs'
+import express, { Request, Response, Express, Application } from 'express'
 import path from 'path'
+import fs from 'fs'
 import https from 'https'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
@@ -10,6 +10,7 @@ import passport from 'passport'
 import mongoose from 'mongoose'
 import setUpPassport from './setuppassport'
 import routes from './routes'
+import { Server } from 'http'
 
 const HTTPS_PORT = 4333
 const HTTP_PORT = 8081
@@ -40,14 +41,28 @@ app.use(passport.session())
 
 app.use(routes)
 
-app.listen(
+app.get('/user-agent', (req: Request, res: Response) => {
+  const userAgent = req.headers['user-agent'] !== null ?
+    req.headers['user-agent'] : 'none'
+
+  if (req.accepts('html') === 'html') {
+    res.render('user-agent', { userAgent })
+  } else {
+    res.type('text')
+    res.send(userAgent)
+  }
+})
+
+export const server: Server = app.listen(
   HTTP_PORT,
   () => console.log(`HTTP server listening on port ${HTTP_PORT}`)
 )
 
 https.createServer({
-  key: fs.readFileSync('ssl/private.key'),
-  cert: fs.readFileSync('ssl/certificate.crt')
+  key: fs.readFileSync(path.resolve(__dirname, '../ssl/private.key')),
+  cert: fs.readFileSync(path.resolve(__dirname, '../ssl/certificate.crt'))
 }, app).listen(HTTPS_PORT, () => {
   console.log(`HTTPS server listening on port ${HTTPS_PORT}...`)
 })
+
+export default app

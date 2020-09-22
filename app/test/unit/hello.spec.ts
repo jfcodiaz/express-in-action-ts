@@ -1,4 +1,4 @@
-import hello from '../src/libs/hello'
+import hello from '../../src/libs/hello'
 import { expect } from 'chai'
 
 describe('Hello Mocha and chai with TS! ', (): void => {
